@@ -10,6 +10,7 @@ public class GlobalConfig {
     public static ForgeConfigSpec CONFIG;
 
     public static ForgeConfigSpec.ConfigValue<Integer> PORT;
+    public static ForgeConfigSpec.ConfigValue<Boolean> PVP_ENABLED;
 
     static {
         setupConfig();
@@ -20,6 +21,12 @@ public class GlobalConfig {
         BUILDER.comment("Configure port server will listen").push("portConfig");
         PORT = BUILDER.define("port", 9090);
         BUILDER.pop();
+
+        // Configure PvP settings
+        BUILDER.comment("Configure PvP settings").push("pvpConfig");
+        PVP_ENABLED = BUILDER.define("pvpEnabled", false); // PvP disabled by default
+        BUILDER.pop();
+
         CONFIG = BUILDER.build();
     }
 
@@ -35,5 +42,14 @@ public class GlobalConfig {
             data = PORT.get();
         }
         return data;
+    }
+
+    public static boolean isPvpEnabled() {
+        // Load the PvP setting from config
+        boolean pvp = false;
+        if (CONFIG.isLoaded()) {
+            pvp = PVP_ENABLED.get();
+        }
+        return pvp;
     }
 }
